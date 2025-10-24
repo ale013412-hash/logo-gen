@@ -1,46 +1,97 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LogoGenRP Demo</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Generatore Logo</title>
 <style>
-body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg,#0f172a,#1e293b);
-  color:#fff;
-  text-align:center;
-  padding:50px;
-}
-textarea, button {
-  padding:10px;
-  margin:10px;
-  border-radius:10px;
-  border:none;
-}
-button {
-  background:linear-gradient(90deg,#6366f1,#8b5cf6);
-  color:white;
-  cursor:pointer;
-}
-img { margin-top:20px; max-width:300px; border-radius:15px;}
+  body {
+    background-color: #121212;
+    color: #eeeeee;
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  textarea {
+    width: 300px;
+    height: 80px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    resize: none;
+    background-color: #222;
+    color: #eee;
+  }
+  button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  #logo-container {
+    margin-top: 20px;
+  }
+  #logo-container img {
+    max-width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #4caf50;
+  }
 </style>
 </head>
 <body>
-<h1>🎨 LogoGenRP Demo</h1>
-<p>Scrivi la descrizione del tuo logo:</p>
-<textarea id="prompt" placeholder="Logo neon blu con scritta Artemis RP"></textarea><br>
-<button onclick="generateLogo()">Genera Logo (Demo)</button>
-<img id="result" style="display:none"/>
+<h1>Generatore di Logo AI</h1>
+<textarea id="prompt" placeholder="Inserisci il testo per il logo..."></textarea><br />
+<button id="generate">Genera Logo</button>
+
+<div id="logo-container"></div>
+
 <script>
-function generateLogo(){
-  const prompt = document.getElementById('prompt').value;
-  if(!prompt){alert('Scrivi qualcosa!'); return;}
-  // Demo: non chiama OpenAI, mostra immagine statica
-  const img = document.getElementById('result');
-  img.src = 'https://via.placeholder.com/300x300.png?text='+encodeURIComponent(prompt);
-  img.style.display='block';
-}
+  document.getElementById('generate').addEventListener('click', async () => {
+    const prompt = document.getElementById('prompt').value.trim();
+    if (!prompt) {
+      alert("Inserisci un testo per generare il logo.");
+      return;
+    }
+
+    // Mostriamo messaggio di caricamento
+    const container = document.getElementById('logo-container');
+    container.innerHTML = "Sto generando il logo...";
+
+    try {
+      // Chiama la funzione Netlify (serverless)
+      const response = await fetch('/.netlify/functions/generate-logo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Errore: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+
+      if(data.data && data.data.length > 0){
+        const imageUrl = data.data[0].url;
+        container.innerHTML = `<img src="${imageUrl}" alt="Logo generato" />`;
+      } else {
+        container.innerHTML = "Nessun logo generato, riprova.";
+      }
+    } catch (error) {
+      container.innerHTML = `Errore durante la generazione: ${error.message}`;
+    }
+  });
 </script>
 </body>
 </html>
