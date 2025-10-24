@@ -3,10 +3,10 @@ const fetch = require("node-fetch");
 exports.handler = async function(event, context) {
   const { prompt } = JSON.parse(event.body);
 
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // devi configurare questa variabile su Netlify
+  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
   if (!prompt) {
-    return { statusCode: 400, body: JSON.stringify({ error: "Missing prompt" }) };
+    return { statusCode: 400, body: JSON.stringify({ error: "Prompt mancante" }) };
   }
 
   try {
@@ -29,7 +29,6 @@ exports.handler = async function(event, context) {
       statusCode: 200,
       body: JSON.stringify(data)
     };
-
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
   }

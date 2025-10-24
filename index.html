@@ -1,9 +1,34 @@
-// dentro <script>...
-const response = await fetch("/.netlify/functions/generate-logo", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ prompt })
-});
-const data = await response.json();
-// data conterrà la risposta dell'API passata dalla Function
-const imageUrl = data.data[0].url; 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>LogoGenRP</title>
+</head>
+<body>
+  <textarea id="prompt" placeholder="Descrivi il logo"></textarea>
+  <button onclick="generateLogo()">Genera Logo</button>
+  <img id="result" style="display:none" />
+  <script>
+    async function generateLogo() {
+      const prompt = document.getElementById("prompt").value.trim();
+      if (!prompt) {
+        alert("Scrivi una descrizione!");
+        return;
+      }
+      const res = await fetch('/.netlify/functions/generate-logo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      if (data.data && data.data.length > 0) {
+        const img = document.getElementById("result");
+        img.src = data.data[0].url;
+        img.style.display = "block";
+      } else {
+        alert("Errore nella generazione");
+      }
+    }
+  </script>
+</body>
+</html>
