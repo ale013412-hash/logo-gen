@@ -1,0 +1,9 @@
+// dentro <script>...
+const response = await fetch("/.netlify/functions/generate-logo", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ prompt })
+});
+const data = await response.json();
+// data conterrà la risposta dell'API passata dalla Function
+const imageUrl = data.data[0].url; 
