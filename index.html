@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <title>LogoGenRP</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LogoGenRP Demo</title>
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+  color:#fff;
+  text-align:center;
+  padding:50px;
+}
+textarea, button {
+  padding:10px;
+  margin:10px;
+  border-radius:10px;
+  border:none;
+}
+button {
+  background:linear-gradient(90deg,#6366f1,#8b5cf6);
+  color:white;
+  cursor:pointer;
+}
+img { margin-top:20px; max-width:300px; border-radius:15px;}
+</style>
 </head>
 <body>
-  <textarea id="prompt" placeholder="Descrivi il logo"></textarea>
-  <button onclick="generateLogo()">Genera Logo</button>
-  <img id="result" style="display:none" />
-  <script>
-    async function generateLogo() {
-      const prompt = document.getElementById("prompt").value.trim();
-      if (!prompt) {
-        alert("Scrivi una descrizione!");
-        return;
-      }
-      const res = await fetch('/.netlify/functions/generate-logo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
-      });
-      const data = await res.json();
-      if (data.data && data.data.length > 0) {
-        const img = document.getElementById("result");
-        img.src = data.data[0].url;
-        img.style.display = "block";
-      } else {
-        alert("Errore nella generazione");
-      }
-    }
-  </script>
+<h1>🎨 LogoGenRP Demo</h1>
+<p>Scrivi la descrizione del tuo logo:</p>
+<textarea id="prompt" placeholder="Logo neon blu con scritta Artemis RP"></textarea><br>
+<button onclick="generateLogo()">Genera Logo (Demo)</button>
+<img id="result" style="display:none"/>
+<script>
+function generateLogo(){
+  const prompt = document.getElementById('prompt').value;
+  if(!prompt){alert('Scrivi qualcosa!'); return;}
+  // Demo: non chiama OpenAI, mostra immagine statica
+  const img = document.getElementById('result');
+  img.src = 'https://via.placeholder.com/300x300.png?text='+encodeURIComponent(prompt);
+  img.style.display='block';
+}
+</script>
 </body>
 </html>
