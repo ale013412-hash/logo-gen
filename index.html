@@ -3,95 +3,183 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Generatore Logo</title>
+<title>Generatore Logo BY ZYRO</title>
 <style>
+  /* Reset base */
+  * {
+    box-sizing: border-box;
+  }
   body {
-    background-color: #121212;
-    color: #eeeeee;
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0;
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  main {
+    flex-grow: 1;
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(25, 22, 40, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+  h1 {
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: 1.2px;
+    text-align: center;
+    color: #ffd700;
+  }
   textarea {
-    width: 300px;
-    height: 80px;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
+    width: 100%;
+    min-height: 100px;
+    padding: 14px 16px;
+    font-size: 18px;
+    border-radius: 8px;
     border: none;
-    resize: none;
-    background-color: #222;
-    color: #eee;
+    background: #2e2a44;
+    color: #ddd;
+    resize: vertical;
+    transition: box-shadow 0.3s ease;
+  }
+  textarea:focus {
+    outline: none;
+    box-shadow: 0 0 8px #ffd700;
+    background: #3c3755;
   }
   button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4caf50;
+    margin-top: 20px;
+    background: #ffd700;
     border: none;
-    border-radius: 5px;
-    color: white;
+    padding: 14px 28px;
+    font-weight: 700;
+    font-size: 18px;
+    border-radius: 8px;
+    color: #1f1c2c;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background 0.25s ease, transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
   }
   button:hover {
-    background-color: #45a049;
+    background: #e6c200;
+    transform: scale(1.05);
+  }
+  button:active {
+    transform: scale(0.95);
   }
   #logo-container {
-    margin-top: 20px;
+    margin-top: 30px;
+    min-height: 250px;
+    width: 100%;
+    background: #2e2a44;
+    border-radius: 12px;
+    box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
   }
   #logo-container img {
-    max-width: 300px;
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 10px;
-    box-shadow: 0 0 10px #4caf50;
+    box-shadow: 0 0 12px #ffd700;
+    transition: opacity 0.5s ease;
+  }
+  #loading, #error {
+    position: absolute;
+    color: #ffd700;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 0 20px;
+  }
+  footer {
+    text-align: center;
+    padding: 16px 0;
+    background: #1f1c2c;
+    color: #999;
+    font-size: 14px;
+  }
+  @media (max-width: 500px) {
+    main {
+      margin: 20px 10px;
+    }
+    button, textarea {
+      font-size: 16px;
+      padding: 12px 20px;
+    }
   }
 </style>
 </head>
 <body>
-<h1>Generatore di Logo AI</h1>
-<textarea id="prompt" placeholder="Inserisci il testo per il logo..."></textarea><br />
-<button id="generate">Genera Logo</button>
-
-<div id="logo-container"></div>
+<main>
+  <h1>Generatore Logo BY ZYRO</h1>
+  <textarea id="prompt" placeholder="Scrivi il testo per il tuo logo personalizzato..."></textarea>
+  <button id="generate">Genera Logo</button>
+  <div id="logo-container"></div>
+</main>
+<footer>
+  Genera loghi completamente custom BY ZYRO
+</footer>
 
 <script>
-  document.getElementById('generate').addEventListener('click', async () => {
-    const prompt = document.getElementById('prompt').value.trim();
+  const button = document.getElementById('generate');
+  const promptInput = document.getElementById('prompt');
+  const logoContainer = document.getElementById('logo-container');
+
+  button.addEventListener('click', async () => {
+    const prompt = promptInput.value.trim();
+    logoContainer.innerHTML = '';
     if (!prompt) {
-      alert("Inserisci un testo per generare il logo.");
+      showError("Inserisci un testo per generare il logo.");
       return;
     }
 
-    // Mostriamo messaggio di caricamento
-    const container = document.getElementById('logo-container');
-    container.innerHTML = "Sto generando il logo...";
+    showLoading("Generazione in corso...");
 
     try {
-      // Chiama la funzione Netlify (serverless)
       const response = await fetch('/.netlify/functions/generate-logo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt })
       });
-      
+
       if (!response.ok) {
-        throw new Error(`Errore: ${response.statusText}`);
+        throw new Error(`Errore ${response.status}: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
 
-      if(data.data && data.data.length > 0){
-        const imageUrl = data.data[0].url;
-        container.innerHTML = `<img src="${imageUrl}" alt="Logo generato" />`;
+      if (data.data && data.data.length > 0 && data.data[0].url) {
+        showImage(data.data[0].url);
       } else {
-        container.innerHTML = "Nessun logo generato, riprova.";
+        showError("Nessun logo generato, riprova.");
       }
     } catch (error) {
-      container.innerHTML = `Errore durante la generazione: ${error.message}`;
+      showError(`Errore: ${error.message}`);
     }
   });
+
+  function showLoading(text) {
+    logoContainer.innerHTML = `<div id="loading">${text}</div>`;
+  }
+
+  function showError(text) {
+    logoContainer.innerHTML = `<div id="error">${text}</div>`;
+  }
+
+  function showImage(url) {
+    logoContainer.innerHTML = `<img src="${url}" alt="Logo generato" />`;
+  }
 </script>
 </body>
 </html>
