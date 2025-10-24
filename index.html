@@ -3,150 +3,170 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Generatore Logo BY ZYRO</title>
+<title>Generatore Logo - BY ZYRO</title>
 <style>
-  /* Reset base */
-  * {
-    box-sizing: border-box;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
   body {
     margin: 0;
-    background: linear-gradient(135deg, #1f1c2c, #928dab);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #eee;
+    font-family: 'Poppins', sans-serif;
+    background: #121014;
+    color: #d8c1f0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
-  main {
-    flex-grow: 1;
-    max-width: 480px;
-    margin: 40px auto;
-    padding: 20px;
-    background: rgba(25, 22, 40, 0.85);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-    display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px;
   }
   h1 {
-    font-weight: 700;
-    margin-bottom: 24px;
-    letter-spacing: 1.2px;
-    text-align: center;
-    color: #ffd700;
+    font-weight: 600;
+    color: #9a6fff;
+    margin-bottom: 30px;
+    text-shadow: 0 0 6px #a57cff;
   }
-  textarea {
+  .input-group {
+    display: flex;
+    max-width: 420px;
     width: 100%;
-    min-height: 100px;
-    padding: 14px 16px;
-    font-size: 18px;
-    border-radius: 8px;
-    border: none;
-    background: #2e2a44;
-    color: #ddd;
-    resize: vertical;
-    transition: box-shadow 0.3s ease;
+    margin-bottom: 20px;
   }
-  textarea:focus {
+  input[type="text"] {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 8px 0 0 8px;
+    border: none;
+    font-size: 1rem;
+    background: #231f38;
+    color: #ddd;
     outline: none;
-    box-shadow: 0 0 8px #ffd700;
-    background: #3c3755;
+    transition: background 0.3s ease;
+  }
+  input[type="text"]:focus {
+    background: #3b3373;
+    box-shadow: 0 0 10px #9a6fff;
   }
   button {
-    margin-top: 20px;
-    background: #ffd700;
+    background: #9a6fff;
+    color: #121014;
     border: none;
-    padding: 14px 28px;
-    font-weight: 700;
-    font-size: 18px;
-    border-radius: 8px;
-    color: #1f1c2c;
+    padding: 14px 24px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 0 8px 8px 0;
     cursor: pointer;
-    transition: background 0.25s ease, transform 0.2s ease;
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+    transition: background 0.3s ease;
+    user-select: none;
   }
-  button:hover {
-    background: #e6c200;
-    transform: scale(1.05);
+  button:hover:not(:disabled) {
+    background: #7a4ff0;
   }
-  button:active {
-    transform: scale(0.95);
+  button:disabled {
+    background: #654ea3;
+    cursor: default;
   }
-  #logo-container {
-    margin-top: 30px;
-    min-height: 250px;
+  .message {
+    max-width: 420px;
+    margin-bottom: 20px;
+    min-height: 1.3em;
+    font-weight: 600;
+  }
+  .message.error {
+    color: #ff6f6f;
+    text-shadow: 0 0 5px #ff4a4a;
+  }
+  .message.success {
+    color: #a0ffbc;
+    text-shadow: 0 0 5px #57d281;
+  }
+  .logo-container {
+    max-width: 420px;
     width: 100%;
-    background: #2e2a44;
+    min-height: 300px;
     border-radius: 12px;
-    box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.2);
+    background: #1f1b2e;
+    box-shadow: 0 0 15px #7a4ff0;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    position: relative;
+    user-select: none;
   }
-  #logo-container img {
+  .logo-container img {
     max-width: 100%;
     max-height: 100%;
-    border-radius: 10px;
-    box-shadow: 0 0 12px #ffd700;
-    transition: opacity 0.5s ease;
+    border-radius: 8px;
   }
-  #loading, #error {
-    position: absolute;
-    color: #ffd700;
-    font-weight: 700;
-    font-size: 1.2rem;
-    text-align: center;
-    padding: 0 20px;
+  .loading-spinner {
+    border: 4px solid #3b3373;
+    border-top: 4px solid #9a6fff;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
   footer {
-    text-align: center;
-    padding: 16px 0;
-    background: #1f1c2c;
-    color: #999;
-    font-size: 14px;
-  }
-  @media (max-width: 500px) {
-    main {
-      margin: 20px 10px;
-    }
-    button, textarea {
-      font-size: 16px;
-      padding: 12px 20px;
-    }
+    margin-top: auto;
+    color: #6b5b9e;
+    font-size: 0.8rem;
   }
 </style>
 </head>
 <body>
-<main>
-  <h1>Generatore Logo BY ZYRO</h1>
-  <textarea id="prompt" placeholder="Scrivi il testo per il tuo logo personalizzato..."></textarea>
-  <button id="generate">Genera Logo</button>
-  <div id="logo-container"></div>
-</main>
-<footer>
-  Genera loghi completamente custom BY ZYRO
-</footer>
+
+<h1>Generatore Logo BY ZYRO</h1>
+
+<div class="input-group">
+  <input id="promptInput" type="text" placeholder="Inserisci idea per il logo..." />
+  <button id="generateBtn">Genera Logo</button>
+</div>
+
+<div class="message" id="message"></div>
+
+<div class="logo-container" id="logoContainer">
+  <!-- Logo o loader appariranno qui -->
+</div>
+
+<footer>© 2025 BY ZYRO - Tutti i diritti riservati</footer>
 
 <script>
-  const button = document.getElementById('generate');
-  const promptInput = document.getElementById('prompt');
-  const logoContainer = document.getElementById('logo-container');
+  const promptInput = document.getElementById('promptInput');
+  const generateBtn = document.getElementById('generateBtn');
+  const messageEl = document.getElementById('message');
+  const logoContainer = document.getElementById('logoContainer');
 
-  button.addEventListener('click', async () => {
-    const prompt = promptInput.value.trim();
+  function showMessage(text, type = '') {
+    messageEl.textContent = text;
+    messageEl.className = 'message ' + type;
+  }
+
+  function clearMessage() {
+    messageEl.textContent = '';
+    messageEl.className = 'message';
+  }
+
+  function showLogo(url) {
+    logoContainer.innerHTML = `<img src="${url}" alt="Logo generato" />`;
+  }
+
+  function showLoading() {
+    logoContainer.innerHTML = `<div class="loading-spinner"></div>`;
+  }
+
+  function clearLogo() {
     logoContainer.innerHTML = '';
-    if (!prompt) {
-      showError("Inserisci un testo per generare il logo.");
-      return;
-    }
+  }
 
-    showLoading("Generazione in corso...");
+  async function generateLogo(prompt) {
+    showMessage('');
+    clearLogo();
+    showLoading();
+    generateBtn.disabled = true;
 
     try {
+      // QUI sostituisci l'URL con la tua funzione reale Netlify
       const response = await fetch('/.netlify/functions/generate-logo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -154,32 +174,43 @@
       });
 
       if (!response.ok) {
-        throw new Error(`Errore ${response.status}: ${response.statusText}`);
+        throw new Error(`Errore server: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
+      console.log('Risposta API:', data);
 
-      if (data.data && data.data.length > 0 && data.data[0].url) {
-        showImage(data.data[0].url);
+      if (data.data && data.data.length && data.data[0].url) {
+        showLogo(data.data[0].url);
+        showMessage('Logo generato con successo!', 'success');
       } else {
-        showError("Nessun logo generato, riprova.");
+        throw new Error('Risposta API non valida');
       }
-    } catch (error) {
-      showError(`Errore: ${error.message}`);
+
+    } catch (err) {
+      clearLogo();
+      showMessage(`Errore durante la generazione: ${err.message}`, 'error');
+    } finally {
+      generateBtn.disabled = false;
     }
+  }
+
+  generateBtn.addEventListener('click', () => {
+    const prompt = promptInput.value.trim();
+    if (!prompt) {
+      showMessage('Inserisci un testo valido!', 'error');
+      return;
+    }
+    generateLogo(prompt);
   });
 
-  function showLoading(text) {
-    logoContainer.innerHTML = `<div id="loading">${text}</div>`;
-  }
-
-  function showError(text) {
-    logoContainer.innerHTML = `<div id="error">${text}</div>`;
-  }
-
-  function showImage(url) {
-    logoContainer.innerHTML = `<img src="${url}" alt="Logo generato" />`;
-  }
+  // Per comodità, genera logo anche premendo Invio
+  promptInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      generateBtn.click();
+    }
+  });
 </script>
+
 </body>
 </html>
